@@ -1,0 +1,7 @@
+monitor_group: monitor
+monitor_user: monitor
+grafana_home: "/var/lib/monitor/grafana"
+grafana_version: "11.3.0"
+grafana_url: "https://dl.grafana.com/enterprise/release/grafana-enterprise-{{ grafana_version }}.linux-amd64.tar.gz"
+grafana_tmp_file: "/tmp/grafana.tar.gz"
+grafana_tmp_path: "/tmp/grafana"

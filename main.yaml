@@ -1,0 +1,7 @@
+- name: Grafana + Prometeus Installation
+  hosts: localhost
+  become: true
+  gather_facts: true
+
+  roles:
+    - grafana

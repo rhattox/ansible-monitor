@@ -1,0 +1,83 @@
+- name: Update APT package cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install prerequisites for Grafana
+  ansible.builtin.apt:
+    name:
+      - curl
+    state: present
+
+- name: Create service user
+  block:
+    - name: Create monitor group
+      ansible.builtin.group:
+        name: "{{ monitor_group }}"
+        state: present
+
+    - name: Create monitor user
+      ansible.builtin.user:
+        name: "{{ monitor_user }}"
+        group: "{{ monitor_group }}"
+        createhome: false
+
+- name: Create monitor home directory
+  ansible.builtin.file:
+    path: "{{ grafana_home }}"
+    state: directory
+    owner: "{{ monitor_user }}"
+    group: "{{ monitor_group }}"
+    mode: "0755"
+
+- name: Download and Extract
+  block:
+    - name: Download monitor tar file
+      ansible.builtin.get_url:
+        url: "{{ grafana_url }}"
+        dest: "{{ grafana_tmp_file }}"
+        mode: "0755"
+
+    - name: Create temporary directory
+      ansible.builtin.file:
+        path: "{{ grafana_tmp_path }}"
+        state: directory
+        owner: "{{ ansible_env.SUDO_USER }}"
+        group: "{{ ansible_env.SUDO_USER }}"
+        mode: "0755"
+
+    - name: Extract monitor archive to temporary path
+      ansible.builtin.unarchive:
+        src: "{{ grafana_tmp_file }}"
+        dest: "{{ grafana_tmp_path }}"
+        remote_src: true
+
+- name: Update the path and installs grafana
+  block:
+    - name: Copy Grafana to path from temporary path
+      ansible.builtin.copy:
+        src: "{{ grafana_tmp_path }}/"
+        dest: "{{ grafana_home }}"
+        remote_src: true
+        mode: "0755"
+        owner: "{{ monitor_user }}"
+        group: "{{ monitor_group }}"
+
+    - name: Creates Symlink Server
+      ansible.builtin.file:
+        src: "{{ grafana_home }}/grafana-v{{ grafana_version }}/bin/grafana"
+        dest: "/usr/bin/grafana"
+        mode: "0777"
+        owner: "{{ monitor_user }}"
+        group: "{{ monitor_group }}"
+        state: link
+
+
+- name: Configure grafana to work on my environment
+  block:
+     - name: Generate SystemD Config
+       ansible.builtin.template:
+         src: roles/grafana/templates/grafana.service.j2
+         dest: "/etc/systemd/system/grafana.service"
+         group: "{{ monitor_group }}"
+         owner: "{{ monitor_user }}"
+         mode: "0755"
