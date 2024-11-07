@@ -81,3 +81,20 @@
          group: "{{ monitor_group }}"
          owner: "{{ monitor_user }}"
          mode: "0755"
+
+- name: Configure defaults
+  block: 
+    - name: Change root_url in default.ini
+      ansible.builtin.lineinfile:
+        path: "{{ grafana_home }}/grafana-v{{ grafana_version }}/conf/defaults.ini"
+        regexp: '^root_url ='
+        line: 'root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana/'
+
+    - name: Change serve_from_sub_path to true in default.ini
+      ansible.builtin.lineinfile:
+        path: "{{ grafana_home }}/grafana-v{{ grafana_version }}/conf/defaults.ini"
+        regexp: '^serve_from_sub_path ='
+        line: 'serve_from_sub_path = true'
+
+
+
