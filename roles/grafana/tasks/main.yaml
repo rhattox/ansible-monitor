@@ -99,5 +99,5 @@
 - name: Delete folder 
   become: yes
   ansible.builtin.file:
-    path: {{ grafana_tmp_path }}
+    path: "{{ grafana_tmp_path }}"
     state: absent

@@ -101,12 +101,6 @@
   become: yes
   ansible.builtin.shell: systemctl daemon-reload
 
-- name: Enable Loki service
-  become: yes
-  ansible.builtin.systemd:
-    name: loki
-    state: reloaded
-
 - name: Restart Loki service
   become: yes
   ansible.builtin.service:
@@ -116,5 +110,5 @@
 - name: Delete folder 
   become: yes
   ansible.builtin.file:
-    path: {{ loki_tmp_path }}
+    path: "{{ loki_tmp_path }}"
     state: absent

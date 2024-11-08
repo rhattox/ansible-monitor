@@ -94,5 +94,5 @@
 - name: Delete folder 
   become: yes
   ansible.builtin.file:
-    path: {{ prometheus_tmp_path }}
+    path: "{{ prometheus_tmp_path }}"
     state: absent
