@@ -1,0 +1,13 @@
+[Unit]
+Description=loki instance
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/loki --config.file={{ loki_full_path }}/loki-config.yaml 
+Restart=always
+User={{ monitor_user }}
+Group={{ monitor_group }}
+
+[Install]
+WantedBy=multi-user.target
+
