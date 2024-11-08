@@ -101,3 +101,14 @@
   ansible.builtin.file:
     path: "{{ grafana_tmp_path }}"
     state: absent
+
+- name: Restart systemd daemon
+  become: yes
+  ansible.builtin.shell: systemctl daemon-reload
+
+- name: Restart Loki service
+  become: yes
+  ansible.builtin.service:
+    name: loki
+    state: restarted
+
