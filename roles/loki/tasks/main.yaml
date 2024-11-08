@@ -105,7 +105,8 @@
   become: yes
   ansible.builtin.service:
     name: loki
-    state: restarted
+    state: started
+    enabled: yes
 
 - name: Delete folder 
   become: yes
