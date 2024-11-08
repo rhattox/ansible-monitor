@@ -1,0 +1,8 @@
+monitor_group: monitor
+monitor_user: monitor
+prometheus_home: "/var/lib/monitor/prometheus"
+prometheus_version: "2.55.1"
+prometheus_full_path: "{{ prometheus_home }}/prometheus-{{ prometheus_version }}.linux-amd64"
+prometheus_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+prometheus_tmp_file: "/tmp/prometheus.tar.gz"
+prometheus_tmp_path: "/tmp/prometheus"

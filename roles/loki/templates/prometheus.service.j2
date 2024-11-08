@@ -1,0 +1,13 @@
+[Unit]
+Description=prometheus instance
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/prometheus --config.file={{ prometheus_full_path }}/prometheus.yml --storage.tsdb.path=/var/lib/monitor/prometheus-db/
+Restart=always
+User={{ monitor_user }}
+Group={{ monitor_group }}
+
+[Install]
+WantedBy=multi-user.target
+

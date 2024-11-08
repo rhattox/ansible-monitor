@@ -1,0 +1,8 @@
+monitor_group: monitor
+monitor_user: monitor
+loki_home: "/var/lib/monitor/loki"
+loki_version: "3.2.1."
+loki_full_path: "{{ loki_home }}/loki-{{ loki_version }}.linux-amd64"
+loki_url: "https://github.com/grafana/loki/releases/download/v{{ loki_version }}/loki-linux-arm64.zip"
+loki_tmp_file: "/tmp/loki.tar.gz"
+loki_tmp_path: "/tmp/loki"
