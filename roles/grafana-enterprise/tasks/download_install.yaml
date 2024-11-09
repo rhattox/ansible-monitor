@@ -31,7 +31,7 @@
 
     - name: Extract Linux Tar Zip file
       ansible.builtin.unarchive:
-        src: "{{ app_tmp_path }}/{{ app_dynamic_zip_name }}"
+        src: "{{ app_tmp_path}}/{{ app_dynamic_zip_name }}"
         dest: "{{ app_home }}"
         remote_src: true
         owner: "{{ app_name }}"
@@ -44,15 +44,29 @@
         path: "{{ app_tmp_path }}"
         state: absent
 
-
 - name: Creates Symlink
   ansible.builtin.file:
-    src: "{{ app_home }}/{{ app_name }}"
-    dest: "/usr/bin/{{ app_name }}"
+    src: "{{ app_home }}/bin/grafana"
+    dest: "/usr/bin/grafana"
     mode: "0777"
     owner: "{{ app_name }}"
     group: "{{ app_name }}"
     state: link
+
+- name: Configure Custom file
+  block:
+    - name: Change root_url in default.ini
+      ansible.builtin.lineinfile:
+        path: "{{ app_home }}/conf/defaults.ini"
+        regexp: '^root_url ='
+        line: 'root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana/'
+
+    - name: Change serve_from_sub_path to true in default.ini
+      ansible.builtin.lineinfile:
+        path: "{{ app_home }}/conf/defaults.ini"
+        regexp: '^serve_from_sub_path ='
+        line: 'serve_from_sub_path = true'
+
 
 - name: Generate SystemD Config
   ansible.builtin.template:
