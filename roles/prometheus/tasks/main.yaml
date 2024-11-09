@@ -4,5 +4,3 @@
 - name: Download App Zip File
   ansible.builtin.include_tasks: download_install.yaml
 
-- name: Gereric Configuration
-  ansible.builtin.include_tasks: clean_up.yaml
