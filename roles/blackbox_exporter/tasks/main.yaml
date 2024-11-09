@@ -1,0 +1,5 @@
+- name: Service User Creation
+  ansible.builtin.include_tasks: service_user.yaml
+
+- name: Download App Zip File
+  ansible.builtin.include_tasks: download_install.yaml

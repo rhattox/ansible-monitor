@@ -6,4 +6,5 @@
     # - grafana-enterprise
     # - prometheus
     # - loki
-    - alertmanager
+    # - alertmanager
+    - blackbox_exporter
