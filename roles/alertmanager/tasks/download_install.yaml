@@ -61,6 +61,15 @@
     owner: "{{ app_name }}"
     mode: "0755"
 
+- name: Create new folder
+  ansible.builtin.file:
+    path: "{{ app_home }}/data"
+    mode: "0750"
+    owner: "{{ app_name }}"
+    group: "{{ app_name }}"
+    state: directory
+
+
 - name: Reload systemd manager configuration
   ansible.builtin.systemd:
     daemon_reload: true
