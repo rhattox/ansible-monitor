@@ -1,0 +1,22 @@
+[Unit]
+Description={{ app_name }} instance
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/{{ app_name }} \
+  --config.file={{ app_home }}/{{ app_name }}.yml 
+
+Restart=always
+
+User={{ app_name }}
+Group={{ app_name }}
+
+RestartSec=3
+LimitNOFILE=4096
+
+# CPU and memory limits
+CPUQuota=50%
+MemoryMax=300M
+
+[Install]
+WantedBy=multi-user.target

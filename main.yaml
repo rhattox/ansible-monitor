@@ -3,6 +3,7 @@
   become: true
   gather_facts: true
   roles:
-    - grafana-enterprise
+    # - grafana-enterprise
     # - prometheus
     # - loki
+    - alertmanager
