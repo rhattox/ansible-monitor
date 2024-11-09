@@ -4,8 +4,8 @@
   gather_facts: true
   roles:
     # - grafana-enterprise
-    # - prometheus
     # - loki
     # - alertmanager
     # - blackbox_exporter
-    - node_exporter
+    # - node_exporter
+    - prometheus

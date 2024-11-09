@@ -62,6 +62,15 @@
     owner: "{{ app_name }}"
     mode: "0755"
 
+- name: Generate Prometheus Configuration
+  ansible.builtin.template:
+    src: "roles/{{ app_name }}/templates/{{ app_name }}.yml.j2"
+    dest: "{{ app_home }}/{{ app_name }}.yml"
+    group: "{{ app_name }}"
+    owner: "{{ app_name }}"
+    mode: "0755"
+
+
 - name: Reload systemd manager configuration
   ansible.builtin.systemd:
     daemon_reload: true
