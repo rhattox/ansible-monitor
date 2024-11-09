@@ -7,4 +7,5 @@
     # - prometheus
     # - loki
     # - alertmanager
-    - blackbox_exporter
+    # - blackbox_exporter
+    - node_exporter

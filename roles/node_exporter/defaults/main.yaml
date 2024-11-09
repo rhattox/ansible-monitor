@@ -1,0 +1,11 @@
+app_name: "node_exporter"
+app_home: "/opt/{{ app_name }}"
+app_tmp_path: "/tmp/ansible-install/{{ app_name }}"
+
+app_version: "1.8.2"
+app_zip_tag: "tar.gz"
+app_extra_tag: "linux-amd64"
+app_dynamic_zip_name: "{{ app_name }}-{{ app_version }}.{{ app_extra_tag }}.{{ app_zip_tag }}"
+app_dynamic_name: "{{ app_name }}-{{ app_extra_tag }}"
+
+app_url: "https://github.com/prometheus/{{ app_name }}/releases/download/v{{ app_version }}/{{ app_dynamic_zip_name }}"
