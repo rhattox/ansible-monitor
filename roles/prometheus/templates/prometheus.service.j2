@@ -5,7 +5,9 @@ After=network.target
 [Service]
 ExecStart=/usr/bin/{{ app_name }} \
   --config.file={{ app_home }}/{{app_name}}.yml \
-  --storage.tsdb.path={{ app_home }}/database
+  --storage.tsdb.path={{ app_home }}/database \
+  --web.listen-address=0.0.0.0:9090 
+ # --web.external-url=http://localhost:9090
 
 Restart=always
 User={{ app_name }}
