@@ -4,7 +4,7 @@
       ansible.builtin.apt:
         update_cache: true
 
-    - name: Install prerequisites for prometheus
+    - name: Install prerequisites
       ansible.builtin.apt:
         name:
           - curl
@@ -47,19 +47,17 @@
 
 - name: Creates Symlink
   ansible.builtin.file:
-    src: "{{ app_home }}/{{ app_dynamic_name }}"  
+    src: "{{ app_home }}/{{ app_name }}"
     dest: "/usr/bin/{{ app_name }}"
     mode: "0777"
     owner: "{{ app_name }}"
     group: "{{ app_name }}"
     state: link
 
-- name: Configure prometheus to work on my environment
-  block:
-    - name: Generate SystemD Config
-      ansible.builtin.template:
-        src: roles/prometheus/templates/prometheus.service.j2
-        dest: "/etc/systemd/system/prometheus.service"
-        group: "{{ app_name }}"
-        owner: "{{ app_name }}"
-        mode: "0755"
+- name: Generate SystemD Config
+  ansible.builtin.template:
+    src: "roles/{{ app_name }}/templates/{{ app_name }}.service.j2"
+    dest: "/etc/systemd/system/{{ app_name }}.service"
+    group: "{{ app_name }}"
+    owner: "{{ app_name }}"
+    mode: "0755"

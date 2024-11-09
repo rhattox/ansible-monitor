@@ -1,12 +1,23 @@
 [Unit]
-Description=prometheus instance
+Description="{{ app_name }} instance"
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/prometheus --config.file={{ prometheus_full_path }}/prometheus.yml --storage.tsdb.path=/var/lib/monitor/prometheus-db/
+ExecStart=/usr/bin/{{ app_name }} \
+  --config.file={{ app_home }}/{{app_name}}.yml \
+  --storage.tsdb.path={{ app_home }}/database
+
 Restart=always
-User={{ monitor_user }}
-Group={{ monitor_group }}
+User={{ app_name }}
+Group={{ app_name }}
+
+RestartSec=3
+LimitNOFILE=4096
+
+# CPU and memory limits
+CPUQuota=50%
+MemoryMax=300M
+
 
 [Install]
 WantedBy=multi-user.target
