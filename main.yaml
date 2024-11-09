@@ -1,8 +1,8 @@
-- name: Grafana + Prometeus Installation
+- name: Monitoring Tools Installation
   hosts: localhost
   become: true
   gather_facts: true
   roles:
     # - grafana
-    - prometheus
-    # - loki
+    # - prometheus
+    - loki

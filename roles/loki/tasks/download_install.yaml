@@ -1,0 +1,63 @@
+- name: Install APT Curl
+  block:
+    - name: Update APT package cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install prerequisites
+      ansible.builtin.apt:
+        name:
+          - curl
+        state: present
+
+- name: Download and Extract Linux Tar Zip
+  block:
+    - name: Create temporary directory
+      ansible.builtin.file:
+        path: "{{ app_tmp_path }}"
+        state: directory
+        owner: "{{ ansible_env.SUDO_USER }}"
+        group: "{{ ansible_env.SUDO_USER }}"
+        mode: "0750"
+
+    - name: Download tar zip file
+      ansible.builtin.get_url:
+        url: "{{ app_url }}"
+        dest: "{{ app_tmp_path }}/"
+        mode: "0750"
+
+- name: Extract and Remove Tar Zip file
+  block:
+
+    - name: Extract Linux Tar Zip file
+      ansible.builtin.unarchive:
+        src: "{{ app_tmp_path}}/{{ app_dynamic_zip_name }}"
+        dest: "{{ app_home }}"
+        remote_src: true
+        owner: "{{ app_name }}"
+        group: "{{ app_name }}"
+        extra_opts:
+          - "--strip-components=1"
+
+    - name: Delete Tar Zip File
+      ansible.builtin.file:
+        path: "{{ app_tmp_path }}"
+        state: absent
+
+
+- name: Creates Symlink
+  ansible.builtin.file:
+    src: "{{ app_home }}/{{ app_name }}"
+    dest: "/usr/bin/{{ app_name }}"
+    mode: "0777"
+    owner: "{{ app_name }}"
+    group: "{{ app_name }}"
+    state: link
+
+- name: Generate SystemD Config
+  ansible.builtin.template:
+    src: "roles/{{ app_name }}/templates/{{ app_name }}.service.j2"
+    dest: "/etc/systemd/system/{{ app_name }}.service"
+    group: "{{ app_name }}"
+    owner: "{{ app_name }}"
+    mode: "0755"

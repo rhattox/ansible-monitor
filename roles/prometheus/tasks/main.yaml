@@ -3,4 +3,3 @@
 
 - name: Download App Zip File
   ansible.builtin.include_tasks: download_install.yaml
-

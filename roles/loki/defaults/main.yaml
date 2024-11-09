@@ -1,8 +1,11 @@
-monitor_group: monitor
-monitor_user: monitor
-loki_home: "/var/lib/monitor/loki"
-loki_version: "3.2.1"
-loki_full_path: "{{ loki_home }}"
-loki_url: "https://github.com/grafana/loki/releases/download/v{{ loki_version }}/loki-linux-amd64.zip"
-loki_tmp_file: "/tmp/loki.tar.gz"
-loki_tmp_path: "/tmp/loki"
+app_name: "loki"
+app_home: "/opt/{{ app_name }}"
+app_tmp_path: "/tmp/ansible-install/{{ app_name }}"
+
+app_version: "3.2.1"
+app_zip_tag: "zip"
+app_extra_tag: "linux-amd64"
+app_dynamic_zip_name: "{{ app_name }}-{{ app_extra_tag }}.{{ app_zip_tag }}"
+app_dynamic_name: "{{ app_name }}-{{ app_extra_tag }}"
+
+app_url: "https://github.com/grafana/{{app_name}}/releases/download/v{{ app_version }}/{{app_dynamic_name}}"
