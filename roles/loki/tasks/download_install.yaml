@@ -7,6 +7,7 @@
     - name: Install prerequisites
       ansible.builtin.apt:
         name:
+          - zip
           - curl
         state: present
 
@@ -37,7 +38,7 @@
         owner: "{{ app_name }}"
         group: "{{ app_name }}"
         extra_opts:
-          - "--strip-components=1"
+          - "-j"
 
     - name: Delete Tar Zip File
       ansible.builtin.file:
@@ -47,12 +48,20 @@
 
 - name: Creates Symlink
   ansible.builtin.file:
-    src: "{{ app_home }}/{{ app_name }}"
+    src: "{{ app_home }}/{{ app_dynamic_name }}"
     dest: "/usr/bin/{{ app_name }}"
     mode: "0777"
     owner: "{{ app_name }}"
     group: "{{ app_name }}"
     state: link
+
+- name: Generate Config File
+  ansible.builtin.template:
+    src: "roles/{{ app_name }}/templates/{{ app_name }}.config.j2"
+    dest: "{{ app_home }}/{{ app_name }}-config.yml"
+    group: "{{ app_name }}"
+    owner: "{{ app_name }}"
+    mode: "0755"
 
 - name: Generate SystemD Config
   ansible.builtin.template:
@@ -61,3 +70,17 @@
     group: "{{ app_name }}"
     owner: "{{ app_name }}"
     mode: "0755"
+
+- name: Reload systemd manager configuration
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable service to start on boot
+  ansible.builtin.systemd:
+    name: "{{app_name}}.service"
+    enabled: yes
+
+- name: Start service
+  ansible.builtin.systemd:
+    name: "{{app_name}}.service"
+    state: started

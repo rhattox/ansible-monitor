@@ -8,4 +8,4 @@ app_extra_tag: "linux-amd64"
 app_dynamic_zip_name: "{{ app_name }}-{{ app_extra_tag }}.{{ app_zip_tag }}"
 app_dynamic_name: "{{ app_name }}-{{ app_extra_tag }}"
 
-app_url: "https://github.com/grafana/{{app_name}}/releases/download/v{{ app_version }}/{{app_dynamic_name}}"
+app_url: "https://github.com/grafana/{{app_name}}/releases/download/v{{ app_version }}/{{app_dynamic_zip_name}}"

@@ -1,12 +1,23 @@
 [Unit]
-Description=loki instance
+Description="{{app_name}} Instance"
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/loki --config.file={{ loki_full_path }}/loki-config.yaml 
+ExecStart=/usr/bin/{{app_name}} \
+  --config.file={{ app_home }}/{{app_name}}-config.yml 
+
 Restart=always
-User={{ monitor_user }}
-Group={{ monitor_group }}
+
+User={{ app_name }}
+Group={{ app_name }}
+
+RestartSec=3
+LimitNOFILE=4096
+
+# CPU and memory limits
+CPUQuota=50%
+MemoryMax=300M
+
 
 [Install]
 WantedBy=multi-user.target
