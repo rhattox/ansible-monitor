@@ -1,0 +1,79 @@
+- name: Install APT Curl
+  block:
+    - name: Update APT package cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install prerequisites for prometheus
+      ansible.builtin.apt:
+        name:
+          - curl
+        state: present
+
+- name: Download and Extract Linux Tar Zip
+  block:
+    - name: Create temporary directory
+      ansible.builtin.file:
+        path: "{{ download_tmp_path }}"
+        state: directory
+        owner: "{{ ansible_env.SUDO_USER }}"
+        group: "{{ ansible_env.SUDO_USER }}"
+        mode: "0750"
+
+    - name: Download monitor taz zip file
+      ansible.builtin.get_url:
+        url: "{{ download_url }}"
+        dest: "{{ download_tmp_path }}/{{ download_file_name }}"
+        mode: "0750"
+
+- name: Extract and Remove Tar Zip file
+  block:
+    - name: Extract Linux Tar Zip file
+      ansible.builtin.unarchive:
+        src: "{{ prometheus_tmp_file }}"
+        dest: "{{ prometheus_tmp_path }}"
+        remote_src: true
+
+    - name: Delete Tar Zip File
+      ansible.builtin.file:
+        path: "{{ prometheus_tmp_file }}"
+        state: absent
+
+- name: Update the path and installs prometheus
+  block:
+    - name: Copy prometheus to path from temporary path
+      ansible.builtin.copy:
+        src: "{{ prometheus_tmp_path }}/"
+        dest: "{{ prometheus_home }}"
+        remote_src: true
+        mode: "0755"
+        owner: "{{ monitor_user }}"
+        group: "{{ monitor_group }}"
+
+    - name: Creates Symlink Server
+      ansible.builtin.file:
+        src: "{{ prometheus_home }}/prometheus-{{ prometheus_version }}.linux-amd64/prometheus"
+        dest: "/usr/bin/prometheus"
+        mode: "0777"
+        owner: "{{ monitor_user }}"
+        group: "{{ monitor_group }}"
+        state: link
+
+    - name: Creates Symlink PromTool
+      ansible.builtin.file:
+        src: "{{ prometheus_home }}/prometheus-{{ prometheus_version }}.linux-amd64/promtool"
+        dest: "/usr/bin/promtool"
+        mode: "0777"
+        owner: "{{ monitor_user }}"
+        group: "{{ monitor_group }}"
+        state: link
+
+- name: Configure prometheus to work on my environment
+  block:
+    - name: Generate SystemD Config
+      ansible.builtin.template:
+        src: roles/prometheus/templates/prometheus.service.j2
+        dest: "/etc/systemd/system/prometheus.service"
+        group: "{{ monitor_group }}"
+        owner: "{{ monitor_user }}"
+        mode: "0755"

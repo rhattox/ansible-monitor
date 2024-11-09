@@ -1,0 +1,38 @@
+- name: Install Application
+  block:
+    - name: Copy application to install dir
+      ansible.builtin.copy:
+        src: "{{ app_tmp_path }}/"
+        dest: "{{ app_home }}"
+        remote_src: true
+        mode: "0755"
+        owner: "{{ app_name }}"
+        group: "{{ app_name }}"
+
+#     - name: Creates Symlink
+#       ansible.builtin.file:
+#         src: "{{ app_home }}/app-{{ app_version }}.linux-amd64/app"
+#         dest: "/usr/bin/app"
+#         mode: "0777"
+#         owner: "{{ app_name }}"
+#         group: "{{ app_name }}"
+#         state: link
+#
+#     - name: Creates Symlink
+#       ansible.builtin.file:
+#         src: "{{ app_home }}/app-{{ app_version }}.linux-amd64/promtool"
+#         dest: "/usr/bin/promtool"
+#         mode: "0777"
+#         owner: "{{ app_name }}"
+#         group: "{{ app_name }}"
+#         state: link
+#
+# - name: Configure app to work on my environment
+#   block:
+#     - name: Generate SystemD Config
+#       ansible.builtin.template:
+#         src: roles/app/templates/app.service.j2
+#         dest: "/etc/systemd/system/app.service"
+#         group: "{{ app_name }}"
+#         owner: "{{ app_name }}"
+#         mode: "0755"
