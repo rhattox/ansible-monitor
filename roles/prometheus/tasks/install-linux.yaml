@@ -1,14 +1,14 @@
-- name: Install Application
-  block:
-    - name: Copy application to install dir
-      ansible.builtin.copy:
-        src: "{{ app_tmp_path }}/"
-        dest: "{{ app_home }}"
-        remote_src: true
-        mode: "0755"
-        owner: "{{ app_name }}"
-        group: "{{ app_name }}"
-
+# - name: Install Application
+#   block:
+#     - name: Copy application to install dir
+#       ansible.builtin.copy:
+#         src: "{{ app_tmp_path }}/"
+#         dest: "{{ app_home }}"
+#         remote_src: true
+#         mode: "0755"
+#         owner: "{{ app_name }}"
+#         group: "{{ app_name }}"
+#
 #     - name: Creates Symlink
 #       ansible.builtin.file:
 #         src: "{{ app_home }}/app-{{ app_version }}.linux-amd64/app"
