@@ -82,30 +82,27 @@
 
 - name: Configure prometheus to work on my environment
   block:
-     - name: Generate SystemD Config
-       ansible.builtin.template:
-         src: roles/prometheus/templates/prometheus.service.j2
-         dest: "/etc/systemd/system/prometheus.service"
-         group: "{{ monitor_group }}"
-         owner: "{{ monitor_user }}"
-         mode: "0755"
+    - name: Generate SystemD Config
+      ansible.builtin.template:
+        src: roles/prometheus/templates/prometheus.service.j2
+        dest: "/etc/systemd/system/prometheus.service"
+        group: "{{ monitor_group }}"
+        owner: "{{ monitor_user }}"
+        mode: "0755"
 
 
-- name: Delete folder 
-  become: yes
+- name: Delete folder
+  become: true
   ansible.builtin.file:
     path: "{{ prometheus_tmp_path }}"
     state: absent
 
 - name: Restart systemd daemon
-  become: yes
+  become: true
   ansible.builtin.shell: systemctl daemon-reload
 
 - name: Restart Loki service
-  become: yes
+  become: true
   ansible.builtin.service:
     name: loki
     state: restarted
-
-
-

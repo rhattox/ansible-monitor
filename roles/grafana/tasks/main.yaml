@@ -74,16 +74,16 @@
 
 - name: Configure grafana to work on my environment
   block:
-     - name: Generate SystemD Config
-       ansible.builtin.template:
-         src: roles/grafana/templates/grafana.service.j2
-         dest: "/etc/systemd/system/grafana.service"
-         group: "{{ monitor_group }}"
-         owner: "{{ monitor_user }}"
-         mode: "0755"
+    - name: Generate SystemD Config
+      ansible.builtin.template:
+        src: roles/grafana/templates/grafana.service.j2
+        dest: "/etc/systemd/system/grafana.service"
+        group: "{{ monitor_group }}"
+        owner: "{{ monitor_user }}"
+        mode: "0755"
 
 - name: Configure defaults
-  block: 
+  block:
     - name: Change root_url in default.ini
       ansible.builtin.lineinfile:
         path: "{{ grafana_home }}/grafana-v{{ grafana_version }}/conf/defaults.ini"
@@ -96,20 +96,19 @@
         regexp: '^serve_from_sub_path ='
         line: 'serve_from_sub_path = true'
 
-- name: Delete folder 
-  become: yes
+- name: Delete folder
+  become: true
   ansible.builtin.file:
     path: "{{ grafana_tmp_path }}"
     state: absent
 
 - name: Restart systemd daemon
-  become: yes
+  become: true
   ansible.builtin.shell: systemctl daemon-reload
 
 - name: Restart Loki service
-  become: yes
+  become: true
   ansible.builtin.service:
     name: loki
     state: started
-    enabled: yes
-
+    enabled: true
